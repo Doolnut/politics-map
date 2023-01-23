@@ -6,6 +6,9 @@ import { Popup } from "react-leaflet";
 import { Marker } from "react-leaflet";
 import { GeoJSON } from "react-leaflet";
 import electorate_boundries from '../data/electorate_boundries/QldStateElectorateBoundries.geojson.json'
+import { readXmlFile, getElectionElement, getDistrictData } from "./electionResults";
+ 
+ var globalStoreElectionResults = window.globalStoreElectionResults;
 
   function returnStateBoundries() {
 
@@ -15,6 +18,7 @@ import electorate_boundries from '../data/electorate_boundries/QldStateElectorat
 function getElectorateName(feature, layer) {
   if (feature.properties) {
     layer.bindPopup(feature.properties.NAME);
+    console.warn(feature.properties.NAME)
   }
 }
 
@@ -43,6 +47,18 @@ function onEachFeature(feature, layer) {
   })
 }
 
+function wtfButtons() {
+  console.log("Read XML Button Pressed")
+  window.globalStoreElectionResults = readXmlFile();
+  console.log("Hopefully printing the global var?")
+  console.log(window.globalStoreElectionResults);
+}
+
+function printGlobal() {
+  console.log("Hopefully printing the global var?")
+  console.log(window.globalStoreElectionResults);
+}
+
 function GenerateMap() {
   return (
     <div className="mapTest">
@@ -56,6 +72,8 @@ function GenerateMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"        />
         <GeoJSON data={returnStateBoundries()} onEachFeature={onEachFeature} />
       </MapContainer>
+      <br></br>
+      <button onClick={wtfButtons}>Read XML Data</button> <button onClick={printGlobal}>Print the Global Variable</button>
     </div>
   );
 }
